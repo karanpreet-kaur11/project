@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Product Detail - Campus Store</title></head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+<h2>Product Detail</h2>
+<table border="1" cellpadding="6">
+    <tr><th>Name</th>        <td th:text="${product.name}"></td></tr>
+    <tr><th>Description</th> <td th:text="${product.description}"></td></tr>
+    <tr><th>Price</th>       <td th:text="'$' + ${product.price}"></td></tr>
+    <tr><th>Stock</th>       <td th:text="${product.stockQty}"></td></tr>
+    <tr><th>Category</th>    <td th:text="${product.category != null ? product.category.name : ''}"></td></tr>
+</table>
+<br>
+<a href="/catalog">Back to Catalog</a>
+&nbsp;|&nbsp;
+<a href="/order/build">Place an Order</a>
+</body>
+</html>

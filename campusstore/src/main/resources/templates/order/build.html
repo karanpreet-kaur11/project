@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Place Order - Campus Store</title></head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+
+<h2>Build Your Order</h2>
+
+<p th:if="${message}" style="color:green;" th:text="${message}"></p>
+<p th:if="${error}"   style="color:red;"   th:text="${error}"></p>
+
+<form th:action="@{/order/place}" method="post">
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Available Stock</th>
+                <th>Quantity (0 to skip)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${products}">
+                <td th:text="${p.name}"></td>
+                <td th:text="'$' + ${p.price}"></td>
+                <td th:text="${p.stockQty}"></td>
+                <td>
+                    <input type="number"
+                           th:name="'qty_' + ${p.id}"
+                           value="0" min="0"
+                           th:max="${p.stockQty}">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <button type="submit">Place Order</button>
+    <a href="/catalog">Cancel</a>
+</form>
+
+</body>
+</html>

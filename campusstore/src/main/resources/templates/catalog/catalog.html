@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Catalog - Campus Store</title></head>
+<body>
+
+<div th:replace="~{fragments/nav :: navbar}"></div>
+
+<h2>Product Catalog</h2>
+
+<p th:if="${message}" style="color:green;" th:text="${message}"></p>
+<p th:if="${error}"   style="color:red;"   th:text="${error}"></p>
+
+<!-- Filter Form -->
+<form th:action="@{/catalog}" method="get">
+    <label>Name: <input type="text" name="name" th:value="${name}"></label>
+    &nbsp;
+    <label>Category:
+        <select name="categoryId">
+            <option value="">All</option>
+            <option th:each="cat : ${categories}"
+                    th:value="${cat.id}"
+                    th:text="${cat.name}"
+                    th:selected="${cat.id == categoryId}">
+            </option>
+        </select>
+    </label>
+    &nbsp;
+    <label>In Stock:
+        <select name="inStock">
+            <option value="">All</option>
+            <option value="true"  th:selected="${inStock == true}">In Stock</option>
+            <option value="false" th:selected="${inStock == false}">Out of Stock</option>
+        </select>
+    </label>
+    &nbsp;
+    <input type="hidden" name="size"    th:value="${pageSize}">
+    <input type="hidden" name="sortBy"  th:value="${sortBy}">
+    <input type="hidden" name="sortDir" th:value="${sortDir}">
+    <button type="submit">Search</button>
+    <a href="/catalog">Clear</a>
+</form>
+
+<hr>
+
+<!-- Sort Links -->
+<p>
+    Sort by:
+    <a th:href="@{/catalog(name=${name},categoryId=${categoryId},inStock=${inStock},page=0,size=${pageSize},sortBy='name',sortDir=${sortBy=='name'?reverseSortDir:'asc'})}">Name</a>
+    |
+    <a th:href="@{/catalog(name=${name},categoryId=${categoryId},inStock=${inStock},page=0,size=${pageSize},sortBy='price',sortDir=${sortBy=='price'?reverseSortDir:'asc'})}">Price</a>
+</p>
+
+<!-- Product Table -->
+<table border="1" cellpadding="6">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="p : ${productPage.content}">
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.category != null ? p.category.name : ''}"></td>
+            <td th:text="'$' + ${p.price}"></td>
+            <td th:text="${p.stockQty}"></td>
+            <td><a th:href="@{/catalog/{id}(id=${p.id})}">View</a></td>
+        </tr>
+        <tr th:if="${productPage.content.isEmpty()}">
+            <td colspan="5">No results on this page.</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Pagination -->
+<div>
+    <span th:text="'Page ' + (${currentPage} + 1) + ' of ' + ${productPage.totalPages}"></span>
+    &nbsp;
+    <a th:if="${!productPage.first}"
+       th:href="@{/catalog(name=${name},categoryId=${categoryId},inStock=${inStock},page=${currentPage-1},size=${pageSize},sortBy=${sortBy},sortDir=${sortDir})}">
+        Previous
+    </a>
+    &nbsp;
+    <a th:if="${!productPage.last}"
+       th:href="@{/catalog(name=${name},categoryId=${categoryId},inStock=${inStock},page=${currentPage+1},size=${pageSize},sortBy=${sortBy},sortDir=${sortDir})}">
+        Next
+    </a>
+</div>
+
+</body>
+</html>

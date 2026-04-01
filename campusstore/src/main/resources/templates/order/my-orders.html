@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>My Orders - Campus Store</title></head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+
+<h2>My Orders</h2>
+
+<p th:if="${message}" style="color:green;" th:text="${message}"></p>
+<p th:if="${error}"   style="color:red;"   th:text="${error}"></p>
+
+<table border="1" cellpadding="6">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="o : ${orders.content}">
+            <td th:text="${o.id}"></td>
+            <td th:text="${o.createdAt}"></td>
+            <td th:text="${o.status}"></td>
+            <td th:text="'$' + ${o.total}"></td>
+            <td><a th:href="@{/order/my-orders/{id}(id=${o.id})}">View</a></td>
+        </tr>
+        <tr th:if="${orders.content.isEmpty()}">
+            <td colspan="5">No orders yet.</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Pagination -->
+<div>
+    <span th:text="'Page ' + (${currentPage} + 1) + ' of ' + ${orders.totalPages}"></span>
+    &nbsp;
+    <a th:if="${!orders.first}"
+       th:href="@{/order/my-orders(page=${currentPage-1},size=${pageSize})}">Previous</a>
+    &nbsp;
+    <a th:if="${!orders.last}"
+       th:href="@{/order/my-orders(page=${currentPage+1},size=${pageSize})}">Next</a>
+</div>
+
+</body>
+</html>

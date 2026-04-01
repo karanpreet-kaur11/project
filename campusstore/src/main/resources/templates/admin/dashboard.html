@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Admin Dashboard - Campus Store</title></head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+
+<h2>Admin Dashboard</h2>
+
+<p th:if="${message}" style="color:green;" th:text="${message}"></p>
+<p th:if="${error}"   style="color:red;"   th:text="${error}"></p>
+
+<!-- Categories -->
+<h3>Categories</h3>
+<form th:action="@{/admin/category/create}" method="post">
+    <input type="text" name="name" placeholder="New category name" required>
+    <button type="submit">Add Category</button>
+</form>
+<ul>
+    <li th:each="cat : ${categories}" th:text="${cat.name}"></li>
+    <li th:if="${categories.isEmpty()}">No categories yet.</li>
+</ul>
+
+<hr>
+
+<!-- Products -->
+<h3>Products</h3>
+<a href="/admin/product/new">+ Add New Product</a>
+<table border="1" cellpadding="6">
+    <thead>
+        <tr>
+            <th>Name</th><th>Category</th>
+            <th>Price</th><th>Stock</th><th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="p : ${products}">
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.category != null ? p.category.name : ''}"></td>
+            <td th:text="'$' + ${p.price}"></td>
+            <td th:text="${p.stockQty}"></td>
+            <td>
+                <a th:href="@{/admin/product/{id}/edit(id=${p.id})}">Edit</a>
+                &nbsp;
+                <form th:action="@{/admin/product/{id}/deactivate(id=${p.id})}"
+                      method="post" style="display:inline;">
+                    <button type="submit"
+                            onclick="return confirm('Deactivate this product?')">
+                        Deactivate
+                    </button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${products.isEmpty()}">
+            <td colspan="5">No active products.</td>
+        </tr>
+    </tbody>
+</table>
+
+<hr>
+
+<!-- Orders -->
+<h3>All Orders</h3>
+<table border="1" cellpadding="6">
+    <thead>
+        <tr>
+            <th>ID</th><th>Customer</th><th>Date</th>
+            <th>Status</th><th>Total</th><th>Update Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="o : ${orders.content}">
+            <td th:text="${o.id}"></td>
+            <td th:text="${o.customer.email}"></td>
+            <td th:text="${o.createdAt}"></td>
+            <td th:text="${o.status}"></td>
+            <td th:text="'$' + ${o.total}"></td>
+            <td>
+                <form th:action="@{/admin/order/{id}/status(id=${o.id})}"
+                      method="post"
+                      th:if="${o.status.name() == 'NEW'}">
+                    <select name="status">
+                        <option value="FULFILLED">FULFILLED</option>
+                        <option value="CANCELLED">CANCELLED</option>
+                    </select>
+                    <button type="submit">Update</button>
+                </form>
+                <span th:if="${o.status.name() != 'NEW'}"
+                      th:text="${o.status} + ' (terminal)'">
+                </span>
+            </td>
+        </tr>
+        <tr th:if="${orders.content.isEmpty()}">
+            <td colspan="6">No orders yet.</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Pagination -->
+<div>
+    <span th:text="'Page ' + (${currentPage} + 1) + ' of ' + ${orders.totalPages}"></span>
+    &nbsp;
+    <a th:if="${!orders.first}"
+       th:href="@{/admin/dashboard(page=${currentPage-1},size=${pageSize})}">Previous</a>
+    &nbsp;
+    <a th:if="${!orders.last}"
+       th:href="@{/admin/dashboard(page=${currentPage+1},size=${pageSize})}">Next</a>
+</div>
+
+</body>
+</html>

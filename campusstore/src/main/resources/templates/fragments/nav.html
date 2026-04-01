@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="navbar">
+    <div>
+        <a href="/catalog"><strong>Campus Store</strong></a>
+        &nbsp;|&nbsp;
+
+        <span th:if="${session.USER_ROLE == 'CUSTOMER'}">
+            <a href="/catalog">Catalog</a> |
+            <a href="/order/build">Place Order</a> |
+            <a href="/order/my-orders">My Orders</a> |
+            Logged in as <strong th:text="${session.USER_NAME}"></strong>
+            &nbsp;
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit">Logout</button>
+            </form>
+        </span>
+
+        <span th:if="${session.USER_ROLE == 'ADMIN'}">
+            <a href="/admin/dashboard">Admin Dashboard</a> |
+            Logged in as <strong th:text="${session.USER_NAME}"></strong>
+            &nbsp;
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit">Logout</button>
+            </form>
+        </span>
+
+        <span th:if="${session.USER_ID == null}">
+            <a href="/login">Login</a> |
+            <a href="/register">Register</a>
+        </span>
+    </div>
+    <hr>
+</nav>
+</body>
+</html>

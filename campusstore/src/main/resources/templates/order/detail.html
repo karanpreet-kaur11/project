@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Order Detail - Campus Store</title></head>
+<body>
+<div th:replace="~{fragments/nav :: navbar}"></div>
+
+<h2>Order Detail</h2>
+
+<table border="1" cellpadding="6">
+    <tr><th>Order ID</th> <td th:text="${order.id}"></td></tr>
+    <tr><th>Date</th>     <td th:text="${order.createdAt}"></td></tr>
+    <tr><th>Status</th>   <td th:text="${order.status}"></td></tr>
+    <tr><th>Total</th>    <td th:text="'$' + ${order.total}"></td></tr>
+</table>
+
+<h3>Items</h3>
+<table border="1" cellpadding="6">
+    <thead>
+        <tr><th>Product</th><th>Unit Price</th><th>Qty</th><th>Subtotal</th></tr>
+    </thead>
+    <tbody>
+        <tr th:each="item : ${order.items}">
+            <td th:text="${item.product.name}"></td>
+            <td th:text="'$' + ${item.unitPrice}"></td>
+            <td th:text="${item.qty}"></td>
+            <td th:text="'$' + ${item.unitPrice * item.qty}"></td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<a href="/order/my-orders">Back to My Orders</a>
+</body>
+</html>
