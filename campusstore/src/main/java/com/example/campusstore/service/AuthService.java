@@ -51,8 +51,7 @@ public class AuthService {
     }
 
     public User authenticate(String email, String plainPassword) {
-        if (email == null || email.trim().isEmpty() ||
-            plainPassword == null || plainPassword.trim().isEmpty()) {
+        if (email == null || !email.trim().toLowerCase().matches("^[a-z0-9+_.-]+@[a-z0-9.-]+\\.[a-z]{2,}$")) {
             throw new IllegalArgumentException("Email and password are required.");
         }
 

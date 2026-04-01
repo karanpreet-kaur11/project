@@ -27,16 +27,16 @@ public class DataSeeder {
             // --- ADMIN user ---
             User admin = new User();
             admin.setName("Admin");
-            admin.setEmail("admin@example.com");
-            admin.setPasswordHash(passwordEncoder.encode("admin123"));
+            admin.setEmail("admin123@campusstore.com");
+            admin.setPasswordHash(passwordEncoder.encode("Admin@123"));
             admin.setRole(User.Role.ADMIN);
             userRepository.save(admin);
 
             // --- CUSTOMER user ---
             User customer = new User();
-            customer.setName("Alice");
-            customer.setEmail("alice@example.com");
-            customer.setPasswordHash(passwordEncoder.encode("alice123"));
+            customer.setName("Karan");
+            customer.setEmail("karan@campusstore.com");
+            customer.setPasswordHash(passwordEncoder.encode("Karan@123"));
             customer.setRole(User.Role.CUSTOMER);
             userRepository.save(customer);
 
@@ -81,8 +81,8 @@ public class DataSeeder {
             }
 
             System.out.println("=== Seed data loaded ===");
-            System.out.println("ADMIN: admin@example.com / admin123");
-            System.out.println("CUSTOMER: alice@example.com / alice123");
+            System.out.println("ADMIN: admin123@campusstore.com / Admin@123");
+            System.out.println("CUSTOMER: karan@campusstore.com / Karan@123");
         };
     }
 }
