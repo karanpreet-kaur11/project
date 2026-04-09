@@ -53,6 +53,10 @@ public class OrderController {
                 try {
                     Long productId = Long.parseLong(entry.getKey().substring(4));
                     int qty = Integer.parseInt(entry.getValue());
+                    if (qty < 0) {
+                        redirectAttributes.addFlashAttribute("error", "Quantity cannot be negative.");
+                        return "redirect:/order/build";
+                    }
                     if (qty > 0) productQtyMap.put(productId, qty);
                 } catch (NumberFormatException ignored) {}
             }
